@@ -1,0 +1,8 @@
+## Interface: 40300
+## Title: Phaeton
+## Author: Lanrutcon
+## Notes: SkyCastbar
+## Version: 1.0
+## SavedVariables: PhaetonSV
+
+Phaeton.lua

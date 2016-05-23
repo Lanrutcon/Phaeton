@@ -82,6 +82,8 @@ local function onUNIT_SPELLCAST_START(event)
 	end
 	
 	local castTime = (endTime - startTime)/1000;
+	castBar.spellName = name;
+	
 	
 	castBar.filler:SetMinMaxValues(0, (endTime - startTime)/1000);
 	castBar.filler:SetStatusBarColor(unpack(color));
@@ -119,8 +121,8 @@ local function onUNIT_SPELLCAST_START(event)
 	castBar:Show();
 end
 
-local function onUNIT_SPELLCAST_SUCCEEDED()
-	if(isCasting) then
+local function onUNIT_SPELLCAST_SUCCEEDED(event, spellCasted)
+	if(isCasting and castBar.spellName == spellCasted) then
     	castBar.filler:SetStatusBarColor(0.35,1,0.35);
     	castBar.leftSpark:SetVertexColor(0.35,1,0.35);
 		castBar.rightSpark:SetVertexColor(0.35,1,0.35);
@@ -140,6 +142,7 @@ local function onUNIT_SPELLCAST_STOP()
     	
    		castBar.filler:SetPoint("CENTER", 0, 0);
     	isCasting = false;
+    	castBar.spellName = nil;
 		createTimer(1, UIFrameFadeOut, castBar, 0.5, 1, 0);    	
 	end
 end
@@ -222,9 +225,9 @@ local function setUpCastBar()
 	castBar.flash:SetBlendMode("ADD");
 	castBar.flash:Hide();
 	
-	castBar:SetScript("OnEvent", function(self, event, unit)
+	castBar:SetScript("OnEvent", function(self, event, unit, ...)
 		if(unit == "player") then
-			eventHandler[event](event);
+			eventHandler[event](event, ...);
 		end
 	end);
 	
